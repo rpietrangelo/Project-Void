@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for dir:*)",
+      "Bash(do)",
+      "Bash(touch \"C:/Users/Rocco Pietrangelo/OneDrive/Desktop/projectVoid/Project-Void/$dir/.gitkeep\")",
+      "Bash(done)"
+    ]
+  }
+}

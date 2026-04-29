@@ -1,0 +1,162 @@
+ELDRITCH DOMINION — BUILD SCHEDULE & PROGRESS NOTES
+======================================================
+Project: Eldritch Dominion (Project Void)
+Engine: Unity 6000.0 LTS, URP, IL2CPP
+Last Updated: 2026-04-28
+
+AGENT HANDOFF NOTES
+-------------------
+This file tracks what has been completed by each agent session and what
+remains. Read this file at the start of every session before doing anything.
+
+REPOSITORY STRUCTURE (as of this session)
+------------------------------------------
+Project-Void/
+  Assets/
+    _Game/
+      Scripts/
+        Core/          <- Phase 0 complete: ServiceLocator, EventBus, GameEvents,
+                          GameEnums, GameConstants, GameManager
+        Network/       <- Phase 1 complete: FirebaseService, PlayFabService
+                          Phase 3 complete: EconomyService
+        Player/        <- Phase 2 complete: LocalCityState
+        Gameplay/
+          Buildings/   <- Phase 2 complete: BuildingData (ScriptableObject)
+          Resources/   <- empty (.gitkeep)
+          Combat/      <- empty (.gitkeep)
+          Research/    <- empty (.gitkeep)
+          Monsters/    <- empty (.gitkeep)
+        World/         <- empty (.gitkeep)
+        UI/
+          Screens/     <- Phase 1: AuthUIController | Phase 2: CityUIController
+                          Phase 4: WorldMapUIController | Phase 5: AllianceUIController
+          Components/  <- empty (.gitkeep)
+          Popups/      <- empty (.gitkeep)
+        Horror/        <- empty (.gitkeep)
+        Data/          <- Phase 1: LocalizationConstants
+        Editor/        <- empty (.gitkeep)
+      Data/
+        Buildings/     <- Phase 2: 8 BuildingData .asset files (MANUAL - needs Unity Editor)
+      Scenes/          <- MANUAL - needs Unity Editor (Bootstrap, Login, WorldMap, City)
+      Settings/
+        Input/         <- empty (.gitkeep)
+        Addressables/  <- empty (.gitkeep)
+    StreamingAssets/
+      Firebase/        <- MANUAL - needs Firebase config files placed here
+    Plugins/           <- MANUAL - SDK imports via Unity Editor
+  CloudScript/
+    handlers.js        <- Phase 3: PlayFab CloudScript (deploy via PlayFab dashboard)
+
+COMPLETED TASKS
+---------------
+[PHASE-0][TASK-0.3] Folder structure created with .gitkeep files
+[PHASE-0][TASK-0.4] Core architecture scripts written:
+  - ServiceLocator.cs
+  - EventBus.cs
+  - GameEvents.cs
+  - GameEnums.cs
+  - GameConstants.cs
+  - GameManager.cs
+[PHASE-1][TASK-1.3] FirebaseService.cs written
+[PHASE-1][TASK-1.4] PlayFabService.cs written
+[PHASE-1][TASK-1.5] AuthUIController.cs written (Login scene UI controller)
+[PHASE-1][TASK-1.5] LocalizationConstants.cs written (all user-facing strings)
+[PHASE-2][TASK-2.1] BuildingData.cs ScriptableObject written
+[PHASE-2][TASK-2.2] LocalCityState.cs written (local city state manager)
+[PHASE-2][TASK-2.3] CityUIController.cs written (City scene UI)
+[PHASE-3][TASK-3.1] CloudScript/handlers.js written (PlayFab CloudScript)
+[PHASE-3][TASK-3.2] EconomyService.cs written
+[PHASE-3][TASK-3.3] LocalCityState.cs updated to use EconomyService
+[PHASE-4][TASK-4.1] WorldMapController.cs written (tilemap world map)
+[PHASE-4][TASK-4.2] CityMarker.cs + WorldMapUIController.cs written
+[PHASE-5][TASK-5.1] AllianceService.cs written
+[PHASE-5][TASK-5.2] AllianceUIController.cs written
+
+PENDING MANUAL STEPS (requires Unity Editor or external dashboards)
+--------------------------------------------------------------------
+PHASE 0:
+  [ ] TASK 0.1 - Create Unity 6000.0 LTS project with URP
+      Settings: IL2CPP, .NET Standard 2.1, New Input System
+      Bundle IDs: com.yourstudio.eldritchdominion
+  [ ] TASK 0.2 - Install packages via Package Manager:
+      TextMeshPro, Input System, Cinemachine 3.x, 2D Tilemap Extras,
+      Addressables, Burst, Collections, DOTween Pro, Lean Touch,
+      NaughtyAttributes (OpenUPM), UniTask (OpenUPM),
+      PlayFab Unity SDK, Firebase Unity SDK (Auth+Firestore+RemoteConfig+Analytics)
+      Run: Assets > External Dependency Manager > Android > Force Resolve
+      Run: Assets > DOTween Utility Panel > Setup DOTween
+  [ ] TASK 0.5 - Create 4 scenes in Unity Editor:
+      Bootstrap (index 0), Login (index 1), WorldMap (index 2), City (index 3)
+      Bootstrap: add [GameManager] GO with GameManager.cs
+      Set Bootstrap as startup scene in Build Settings
+
+PHASE 1:
+  [ ] TASK 1.1 - Firebase Console setup:
+      Create project "eldritch-dominion-dev"
+      Enable Auth: Email/Password, Google, Apple
+      Create Firestore in production mode (us-central1)
+      Add Remote Config keys (see GameConstants.cs)
+      Download and place config files in Assets/StreamingAssets/Firebase/
+      Paste Firestore security rules (see VRD Task 1.1)
+  [ ] TASK 1.2 - PlayFab dashboard setup:
+      Create title "Eldritch Dominion Dev"
+      Create all 6 currencies (PG, VC, EE, CP, FT, WM) with values from VRD
+      Paste Title ID into Unity: Assets > PlayFab > Editor Extensions
+  [ ] Build Login scene UI hierarchy in Unity Editor (see VRD Task 1.5 layout)
+      Panels: Panel_Welcome, Panel_SignIn, Panel_CreateAccount, Panel_FactionChoice
+      Attach AuthUIController.cs to a UI Manager GameObject
+
+PHASE 2:
+  [ ] Create 8 BuildingData ScriptableObject assets in Unity Editor
+      Right-click Assets/_Game/Data/Buildings > Create > ElDom > Building Data
+      Fill in values per VRD Task 2.1 for all 8 buildings
+  [ ] Build City scene UI hierarchy in Unity Editor (see VRD Task 2.3 layout)
+      25 slot grid, HUD panels, detail panels
+      Attach CityUIController.cs
+
+PHASE 3:
+  [ ] Deploy CloudScript/handlers.js to PlayFab:
+      PlayFab Dashboard > Automation > CloudScript > paste handlers.js > Deploy
+
+PHASE 4:
+  [ ] Create 100x100 tilemap in Unity Editor (World Map scene)
+      Add CinemachineConfiner, set up Lean Touch camera rig
+      Build Panel_TileInfo UI
+
+PHASE 5:
+  [ ] Build Alliance UI hierarchy in Unity Editor (see VRD Task 5.2 layout)
+      Tabs: Overview, Members, Chat, Search
+      Attach AllianceUIController.cs
+
+PHASE 6 (PvE Monster System) — NOT YET STARTED
+-----------------------------------------------
+  Requires: Monster ScriptableObjects, MarchService, CombatResolver CloudScript,
+            MonsterSpawner, WorldMap monster markers
+
+PHASES 7+ — NOT YET IN VRD (document was truncated)
+------------------------------------------------------
+  Likely includes: KvK, Patron/Horror system, Research tree, Seasons
+
+IMPORTANT ARCHITECTURE NOTES
+-----------------------------
+- Service Locator pattern: all services register on Awake, GameManager waits for them
+- EventBus: all cross-system communication goes through EventBus.cs events defined in GameEvents.cs
+- Economy is server-authoritative: client calls CloudScript, server validates and deducts
+- Firebase UID is the link between Firebase Auth and PlayFab (LoginWithFirebaseAsync)
+- Never trust client for: resources, timer completion, level validation
+- DOTween Pro for ALL UI animation (no Unity Animator for UI)
+- TextMeshPro for ALL text (no legacy UI Text)
+- UniTask for ALL async (no coroutines for network)
+- Addressables for ALL asset loading (no Resources.Load)
+- New Input System only (no Input.GetKey)
+- Commit format: [PHASE-X][TASK-Y] description
+
+KNOWN ISSUES / WATCH OUT
+-------------------------
+- FirebaseService and PlayFabService must both be present as components in Bootstrap scene
+  before GameManager.Start() runs (it waits for both in ServiceLocator)
+- LocalCityState.cs has a dual-mode: local-only (Phase 2) vs backend-connected (Phase 3).
+  Phase 3 wires EconomyService in. Make sure to connect EconomyService reference in Inspector.
+- Building slot state in Phase 3 comes from PlayFab InternalData["buildings"] (JSON blob)
+- Firestore worldTiles write is blocked client-side (security rules); all tile ownership
+  changes must go through CloudScript
